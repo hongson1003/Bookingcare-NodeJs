@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <button>
+        <a href="/">Home</a>
+    </button>
+    <button>
+        <a href="/about">About</a>
+    </button>
+    <button>
+        <a href="/crud">CRUD</a>
+    </button>
+    <button>
+        <a href="/read-crud">Read Users</a>
+    </button>
+    <h1 class="listUsers">List Users</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>FirsName</th>
+                <th>LastName</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Sex</th>
+                <!-- <th>Avatar</th>
+                <th>RoleID</th>
+                <th>PositionID</th> -->
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i=0;i<data.length;i++) { %>
+                <tr>
+                    <td>
+                        <%=i%>
+
+                    </td>
+                    <td>
+                        <%=data[i].email %>
+
+                    </td>
+                    <td>
+                        <%=data[i].firstName %>
+
+                    </td>
+                    <td>
+                        <%=data[i].lastName %>
+
+                    </td>
+                    <td>
+                        <%=data[i].address %>
+
+                    </td>
+                    <td>
+                        <%=data[i].phoneNumber %>
+
+                    </td>
+                    <% if (data[i].gender==1) { %>
+                        <td>Nam</td>
+                        <% } else { %>
+                            <td>Nữ</td>
+                            <% } %>
+                                <td>
+                                    <a href="/crud-edit?id=<%=data[i].id%>" class="btn-user">Edit</a>
+                                    <a href="/crud-delete?id=<%=data[i].id%>" class="btn-user">Delete</a>
+                                </td>
+                </tr>
+                <% } %>
+        </tbody>
+    </table>
+</body>
+
+</html>

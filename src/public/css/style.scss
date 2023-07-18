@@ -1,0 +1,102 @@
+* {
+    margin: 90 !important;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+body {
+    padding: 4px !important;
+    margin: 0px !important;
+}
+
+img {
+    margin: 20px auto;
+    width: 40%;
+    display: block;
+}
+
+button {
+    min-width: 100px !important;
+    height: 40px !important;
+    margin: 10px !important;
+
+    a {
+        text-decoration: none !important;
+        font-size: 25px !important;
+        font-weight: 700 !important;
+        font-family: cursive !important;
+        color: lightcoral
+    }
+}
+
+.gender {
+    input {
+        margin-right: 5px;
+    }
+}
+
+.listUsers {
+    margin: auto;
+}
+
+table {
+    width: 80vw;
+    margin: 30px auto;
+    border: 3px solid gray;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 3px solid grey;
+    padding: 2px 5px;
+    text-align: center;
+}
+
+.btn-user:first-child {
+    background-color: rgb(140, 172, 24);
+    box-shadow:
+        -5px -5px 8px var(--color-green),
+        -8px -8px 10px var(--color-green),
+        inset 3px 5px 8px var(--color-green),
+}
+
+.btn-user:last-child {
+    background-color: rgb(148, 23, 23);
+    box-shadow:
+        -5px -5px 8px var(--color-red),
+        -8px -8px 10px var(--color-red),
+        inset 3px 5px 8px var(--color-red),
+}
+
+.btn-user {
+    display: inline-flex;
+    margin: 10px;
+    border: 2px solid grey;
+    width: 80px;
+    height: 30px;
+    cursor: pointer;
+    --color-green: #a1ba3c;
+    --color-red: rgb(231, 69, 69);
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 750;
+    text-decoration: none;
+    color: #000;
+}
+
+.btn-user:first-child:hover {
+    box-shadow:
+        5px 5px 8px var(--color-green),
+        8px 8px 10px var(--color-green),
+        inset 3px 5px 8px var(--color-green),
+}
+
+.btn-user:last-child:hover {
+    box-shadow:
+        5px 5px 8px var(--color-red),
+        8px 8px 10px var(--color-red),
+        inset 3px 5px 8px var(--color-red),
+}
