@@ -21,18 +21,17 @@ let checkLogin = async (email, password1) => {
         let { password } = user;
         let correct = isCorrectPassword(password1, password);
         if (correct) {
+            user.name = user.firstName + ' ' + user.lastName;
             for (let prop in user)
-                if (prop != 'email' && prop != 'roleId') {
+                if (prop != 'email' && prop != 'roleId' && prop != 'name') {
                     delete user[prop];
                 }
-
             return {
                 errCode: 0,
                 message: 'Success',
                 user: user,
             }
         }
-
         else
             return {
                 errCode: 2,
@@ -133,10 +132,32 @@ let editUser = async (data) => {
         }
 }
 
+let getAllCodeService = async (type) => {
+    try {
+        if (!type) {
+            return {
+                errCode: 1,
+                message: "Missing parameter",
+            }
+        } else {
+            let data = await db.Allcode.findAll({
+                raw: false,
+                where: {
+                    type: type
+                }
+            })
+            return data;
+        }
+    } catch (e) {
+        return 0;
+    }
+}
+
 module.exports = {
     checkLogin,
     getUsers,
     addUser,
     deleteUser,
-    editUser
+    editUser,
+    getAllCodeService
 }

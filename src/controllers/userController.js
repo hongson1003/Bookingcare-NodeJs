@@ -70,10 +70,34 @@ let updateUser = async (req, res) => {
 
 }
 
+let getAllCode = async (req, res) => {
+    try {
+        let type = req.query.type;
+        let data = await userService.getAllCodeService(type);
+        if (data)
+            return res.status(200).json({
+                errCode: 0,
+                data: data,
+            });
+        else
+            return res.status(200).json(
+                {
+                    errCode: -1,
+                    message: 'Error code from your server!',
+                }
+            )
+    } catch (e) {
+        return res.status(200).json({
+            errCode: -1,
+            message: 'Error code from your server!',
+        })
+    }
+}
 module.exports = {
     handleLogin,
     hanleGetUsers,
     handleCreateUser,
     handleDeleteUser,
     updateUser,
+    getAllCode,
 }

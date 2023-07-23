@@ -21,6 +21,16 @@ let initWebRoutes = (app) => {
     router.post('/api/create-newuser', userController.handleCreateUser);
     router.delete('/api/delete-user', userController.handleDeleteUser);
     router.put('/api/update-user', userController.updateUser);
+    router.get('/api/hello', (req, res) => {
+        return res.status(200).json({
+            errCode: 200,
+            message: 'Hello Việt Nam',
+        })
+    })
+
+    router.get('/api/getallcode', userController.getAllCode);
+
+
 
 
     return app.use('/', router);
