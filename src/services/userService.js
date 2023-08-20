@@ -73,12 +73,14 @@ let addUser = async (data) => {
     await db.User.create({
         email: data.email,
         password: hash,
+        image: data.image,
         firstName: data.firstName,
         lastName: data.lastName,
         address: data.address,
         phoneNumber: data.phoneNumber,
         gender: data.gender,
-        roleId: data.roleId,
+        roleId: data.role,
+        positionId: data.position
     })
     return {
         errCode: 0,
@@ -94,7 +96,7 @@ let deleteUser = async (id) => {
         raw: false,
     })
     if (user) {
-        user.destroy();
+        await user.destroy();
         return {
             errCode: 0,
             message: 'Delete user success',
@@ -118,14 +120,19 @@ let editUser = async (data) => {
     if (user) {
         user.firstName = data.firstName;
         user.lastName = data.lastName;
+        user.phoneNumber = data.phoneNumber;
         user.address = data.address;
+        user.gender = data.gender;
+        user.positionId = data.position;
+        user.roleId = data.role;
+        if (data.image)
+            user.image = data.image;
         await user.save();
         return {
             errCode: 0,
             message: 'Ok updated user'
         }
-    }
-    else
+    } else
         return {
             errCode: 1,
             message: 'Not found!',

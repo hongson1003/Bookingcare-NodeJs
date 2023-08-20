@@ -6,6 +6,7 @@ let hashUserPassword = (password) => {
     return new Promise(async (resolve, reject) => {
         try {
             var hashPW = await bcrypt.hashSync(password, salt);
+            console.log('đã hash')
             resolve(hashPW);
         } catch (e) {
             reject(e);
@@ -13,7 +14,8 @@ let hashUserPassword = (password) => {
 
     })
 }
-let createNewUser = async (data) => {
+let createNewUser = async (user) => {
+    let data = user.body;
     return new Promise(async (resolve, reject) => {
         try {
             let pwhashed = await hashUserPassword(data.password);
@@ -24,9 +26,11 @@ let createNewUser = async (data) => {
                 lastName: data.lastName,
                 address: data.address,
                 phoneNumber: data.phoneNumber,
-                gender: (data.gender == 1) ? 'true' : 'false',
-                roleId: data.roleId,
+                gender: data.gender,
+                roleId: data.role,
+                positionId: data.position
             })
+            console.log('đã resolve')
             resolve('Ok create new user success!');
         } catch (e) {
             reject(e);

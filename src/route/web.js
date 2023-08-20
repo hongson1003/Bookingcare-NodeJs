@@ -1,6 +1,7 @@
-import express, { Router } from 'express';
+import express from 'express';
 import homeController from '../controllers/homeController';
 import userController from '../controllers/userController'
+import doctorController from '../controllers/doctorController';
 let router = express.Router();
 
 let initWebRoutes = (app) => {
@@ -14,7 +15,7 @@ let initWebRoutes = (app) => {
     router.get('/crud-delete', homeController.deleteUser);
     router.post('/api/login', userController.handleLogin);
 
-    // viet api get users
+    // write api for get all users
     router.get('/api/get-users', userController.hanleGetUsers);
 
     // viet api crud
@@ -27,8 +28,10 @@ let initWebRoutes = (app) => {
             message: 'Hello Việt Nam',
         })
     })
-
     router.get('/api/getallcode', userController.getAllCode);
+
+    // Write api for admin to get all doctor 
+    router.get('/api/get-top-doctor', doctorController.getAllTopDoctor);
 
 
 

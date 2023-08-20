@@ -1,16 +1,24 @@
 import userService from '../services/userService'
 
 let handleLogin = async (req, res) => {
-    let email = req.body.email;
-    let password = req.body.password;
-    if (!email || !password) {
-        return res.status(500).json({
-            errCode: 100,
-            message: 'Not empty. Please input all',
+    try {
+        let email = req.body.email;
+        let password = req.body.password;
+        if (!email || !password) {
+            return res.status(500).json({
+                errCode: 100,
+                message: 'Not empty. Please input all',
+            })
+        }
+        let userData = await userService.checkLogin(email, password);
+        return res.status(200).json(userData)
+
+    } catch (e) {
+        return res.status(200).json({
+            errCode: 1,
+            message: 'Error connect Database'
         })
     }
-    let userData = await userService.checkLogin(email, password);
-    return res.status(200).json(userData)
 }
 
 let hanleGetUsers = async (req, res) => {
@@ -23,30 +31,47 @@ let hanleGetUsers = async (req, res) => {
             users: [],
         })
     }
-    let users = await userService.getUsers(id);
-    if (users) {
+    try {
+        let users = await userService.getUsers(id);
+        if (users) {
+            return res.status(200).json({
+                errCode: 0,
+                message: 'OK',
+                users: users,
+            })
+        } else {
+            return res.status(200).json({
+                errCode: 1,
+                message: 'Not found user',
+                users: []
+            })
+        }
+    } catch (e) {
         return res.status(200).json({
-            errCode: 0,
-            message: 'OK',
-            users: users,
-        })
-    } else {
-        return res.status(200).json({
-            errCode: 1,
-            message: 'Not found user',
+            errCode: 2,
+            message: 'Connected database',
             users: []
         })
     }
+
 }
 
 let handleCreateUser = async (req, res) => {
-    if (!req.body.email)
+    try {
+        if (!req.body.email)
+            return res.status(200).json({
+                errCode: 100,
+                message: 'Missing parameter',
+            });
+        let data = await userService.addUser(req.body);
+        return res.status(200).json(data)
+    } catch (e) {
+        console.log(e);
         return res.status(200).json({
-            errCode: 100,
-            message: 'Missing parameter',
+            errCode: -1,
+            message: 'Connected database',
         });
-    let data = await userService.addUser(req.body);
-    return res.status(200).json(data)
+    }
 }
 
 let handleDeleteUser = async (req, res) => {
