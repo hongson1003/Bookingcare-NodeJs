@@ -118,6 +118,41 @@ let getAllCode = async (req, res) => {
         })
     }
 }
+
+let getAllDoctor = async (req, res) => {
+    try {
+        let response = await userService.getAllDR();
+        return res.status(200).json(response);
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            message: "Error from the server",
+        })
+    }
+}
+let createDetailDoctor = async (req, res) => {
+    try {
+        let response = await userService.createDetailDr(req.body);
+        return res.status(200).json(response);
+    } catch (e) {
+        console.log(e);
+        return {
+            errCode: -1,
+            message: "Missing parameter",
+        }
+    }
+}
+
+let getDoctorById = async (req, res) => {
+    let id = req.query.id;
+    let response = await userService.getDRById(id);
+    return res.status(200).json(response);
+}
+let updateDetail = async (req, res) => {
+    let response = await userService.updateDetailDr(req.body.data);
+    return res.status(200).json(response);
+}
 module.exports = {
     handleLogin,
     hanleGetUsers,
@@ -125,4 +160,8 @@ module.exports = {
     handleDeleteUser,
     updateUser,
     getAllCode,
+    getAllDoctor,
+    createDetailDoctor,
+    getDoctorById,
+    updateDetail
 }

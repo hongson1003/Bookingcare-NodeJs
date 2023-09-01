@@ -159,6 +159,143 @@ let getAllCodeService = async (type) => {
         return 0;
     }
 }
+let getAllDR = async () => {
+    try {
+        let data = await db.User.findAll({
+            attributes: {
+                exclude: ['password', 'image']
+            },
+            where: {
+                roleId: 'R2',
+            }
+        });
+        if (data)
+            return {
+                errcode: 0,
+                message: "Get all doctors success",
+                data: data,
+            }
+        else
+            return {
+                errCode: 1,
+                message: "Not found doctors"
+            }
+    } catch (e) {
+        console.log(e);
+        return {
+            errCode: 1,
+            message: "Not found doctors"
+        }
+    }
+}
+let createDetailDr = async (body) => {
+    console.log('body', body)
+    if (!body.data.doctorId || !body.data.contentHTML || !body.data.contentText || !body.data.description)
+        return {
+            errCode: 1,
+            message: 'Missing parameter',
+        }
+    try {
+        await db.Markdown.create({
+            contentHTML: body.data.contentHTML,
+            contentText: body.data.contentText,
+            description: body.data.description,
+            doctorId: body.data.doctorId,
+            clinicId: body.data.clinicId,
+            specialtyId: body.data.specialtyId
+        })
+        return {
+            errCode: 0,
+            message: 'Insert detail user success'
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            errCode: -1,
+            message: "Error from the server",
+        }
+    }
+}
+
+let getDRById = async (id) => {
+    try {
+        let data = await db.User.findOne({
+            where: {
+                id: id,
+            },
+            attributes: {
+                exclude: [
+                    'password',
+                ]
+            },
+            include: [
+                {
+                    model: db.Markdown,
+                    attributes: ['contentHTML', 'contentText', 'description'],
+                    as: 'doctorData'
+                },
+                {
+                    model: db.Allcode, as: 'positionData', attributes: ['valueVi', 'valueEn'],
+                }
+            ],
+            raw: false,
+            nest: true
+        })
+        if (data) {
+            data.image = new Buffer(data.image, 'base64').toString('binary');
+            return {
+                errCode: 0,
+                message: "Đã tìm thấy doctor",
+                data: data,
+            }
+        }
+        else
+            return {
+                errCode: 1,
+                message: "Không tìm tháy user nào cả",
+            }
+
+    } catch (e) {
+        console.log(e)
+        return {
+            errCode: -1,
+            message: "Error from the server",
+        }
+    }
+}
+
+let updateDetailDr = async (data) => {
+    try {
+        let doctor = await db.Markdown.findOne({
+            where: {
+                doctorId: data.id,
+            },
+            attributes: {
+                exclude: ['UserId']
+            },
+            raw: false,
+        });
+        if (doctor) {
+            doctor.description = data.description;
+            doctor.contentHTML = data.contentHTML;
+            doctor.contentText = data.contentText;
+        }
+        await doctor.save();
+        return {
+            errCode: 0,
+            message: 'Update detail doctor success',
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            errCode: -1,
+            message: 'Error from the server'
+        }
+    }
+}
+
+
+
 
 module.exports = {
     checkLogin,
@@ -166,5 +303,9 @@ module.exports = {
     addUser,
     deleteUser,
     editUser,
-    getAllCodeService
+    getAllCodeService,
+    getAllDR,
+    createDetailDr,
+    getDRById,
+    updateDetailDr
 }

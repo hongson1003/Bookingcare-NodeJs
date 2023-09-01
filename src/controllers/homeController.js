@@ -2,7 +2,9 @@ import db from "../models";
 import crudService from "../services/crudService";
 var bcrypt = require('bcryptjs');
 var salt = bcrypt.genSaltSync(10);
-var hash = bcrypt.hashSync("B4c0/\/", salt); let getHomePage = async (req, res) => {
+// var hash = bcrypt.hashSync("B4c0/\/", salt);
+
+let getHomePage = async (req, res) => {
     // let data = await db.User.findAll();
     return res.render('home.ejs');
 }

@@ -32,9 +32,12 @@ let initWebRoutes = (app) => {
 
     // Write api for admin to get all doctor 
     router.get('/api/get-top-doctor', doctorController.getAllTopDoctor);
+    router.get('/api/get-all-doctor', userController.getAllDoctor);
+    router.post('/api/create-detail-doctor', userController.createDetailDoctor);
 
-
-
+    // get detail doctor
+    router.get('/api/get-detail-doctor-by-id', userController.getDoctorById);
+    router.put('/api/update-detail-doctor', userController.updateDetail);
 
     return app.use('/', router);
 }
