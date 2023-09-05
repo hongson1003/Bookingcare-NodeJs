@@ -39,6 +39,9 @@ let initWebRoutes = (app) => {
     router.get('/api/get-detail-doctor-by-id', userController.getDoctorById);
     router.put('/api/update-detail-doctor', userController.updateDetail);
 
+    router.post('/api/create-schedule', doctorController.createSchedule);
+    router.get('/api/get-schedule-by-id', doctorController.getScheduleByDateID)
+
     return app.use('/', router);
 }
 module.exports = initWebRoutes;

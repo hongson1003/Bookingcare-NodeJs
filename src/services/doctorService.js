@@ -1,4 +1,9 @@
-import db from "../models"
+import db from "../models";
+import _, { has } from 'lodash';
+require('dotenv').config();
+const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
+
+
 let getAllTopDoctorService = async (limit) => {
     if (!limit)
         limit = 10;
@@ -40,6 +45,83 @@ let getAllTopDoctorService = async (limit) => {
     }
 }
 
+let createScheduleSV = async (input) => {
+    console.log(input)
+    try {
+        let data = [];
+        if (input && input.length > 0) {
+            data = input.map(item => {
+                item.maxNumber = MAX_NUMBER_SCHEDULE;
+                item.date = new Date(item.date);
+                return item;
+            })
+        }
+        let dataPrevious = await db.Schedule.findAll({
+            attributes: {
+                exclude: ['createdAt', 'updatedAt', 'maxNumber', 'currentNumber', 'id']
+            },
+            where: {
+                doctorId: data[0].doctorId,
+            }
+        })
+        let temp = _.differenceWith(data, dataPrevious, (a, b) => {
+            return a.timeType === b.timeType && a.date.toString() === b.date.toString();
+        })
+        console.log('changes data', temp);
+        await db.Schedule.bulkCreate(temp);
+        return {
+            errCode: 0,
+            message: 'Create schedule success',
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            errCode: -1,
+            message: "Error from the server"
+        }
+    }
+}
+
+let getScheduleByDateIDSV = async (doctorId, date) => {
+
+    if (!doctorId || !date) {
+        return {
+            errCode: 1,
+            message: 'Missing parameter',
+        }
+    }
+    try {
+        let data = await db.Schedule.findAll({
+            where: {
+                doctorId: doctorId,
+                date: date,
+            },
+            include: [
+                { model: db.Allcode, as: 'timeTypeData', attributes: ['valueEn', 'valueVi'] },
+            ],
+            // include: [
+            //     { model: db.Allcode, as: 'timeTypeData', attributes: ['valueEn', 'valueVi'] },
+            // ],
+            raw: false,
+            nested: true
+        })
+        return {
+            errCode: 0,
+            message: 'Get schedule success',
+            data: data,
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            errCode: -1,
+            message: "Error from the server"
+        }
+    }
+}
+
 module.exports = {
     getAllTopDoctorService,
+    createScheduleSV,
+    getScheduleByDateIDSV,
+
 }
