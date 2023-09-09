@@ -119,9 +119,51 @@ let getScheduleByDateIDSV = async (doctorId, date) => {
     }
 }
 
+let getDoctorInfoById = async (id) => {
+    try {
+        if (!id)
+            return {
+                errCode: 1,
+                message: 'Missing parameter',
+            }
+        else {
+            let doctorInfo = await db.Doctor_Info.findOne({
+                where: {
+                    doctorId: id,
+                },
+                include: [
+                    { model: db.Allcode, as: 'priceData', attributes: ['valueEn', 'valueVi'] },
+                    { model: db.Allcode, as: 'provinceData', attributes: ['valueEn', 'valueVi'] },
+                    { model: db.Allcode, as: 'paymentData', attributes: ['valueEn', 'valueVi'] },
+                ],
+                raw: true,
+                nest: true,
+            })
+            if (doctorInfo)
+                return {
+                    errCode: 0,
+                    message: 'Get doctor_info success',
+                    data: doctorInfo,
+                }
+            else
+                return {
+                    errCode: 2,
+                    message: 'Not found'
+                }
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            errCode: -1,
+            message: 'Error from the server',
+        }
+    }
+}
+
 module.exports = {
     getAllTopDoctorService,
     createScheduleSV,
     getScheduleByDateIDSV,
+    getDoctorInfoById
 
 }

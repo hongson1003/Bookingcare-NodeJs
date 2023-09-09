@@ -189,20 +189,32 @@ let getAllDR = async () => {
     }
 }
 let createDetailDr = async (body) => {
+    console.log(body);
     console.log('body', body)
-    if (!body.data.doctorId || !body.data.contentHTML || !body.data.contentText || !body.data.description)
+    if (!body.doctorId || !body.contentHTML || !body.contentText || !body.description
+        || !body.provinceId || !body.paymentId || !body.priceId || !body.nameClinic || !body.addressClinic || !body.note
+    )
         return {
             errCode: 1,
             message: 'Missing parameter',
         }
     try {
         await db.Markdown.create({
-            contentHTML: body.data.contentHTML,
-            contentText: body.data.contentText,
-            description: body.data.description,
-            doctorId: body.data.doctorId,
-            clinicId: body.data.clinicId,
-            specialtyId: body.data.specialtyId
+            contentHTML: body.contentHTML,
+            contentText: body.contentText,
+            description: body.description,
+            doctorId: body.doctorId,
+            clinicId: body.clinicId,
+            specialtyId: body.specialtyId,
+        })
+        await db.Doctor_Info.create({
+            doctorId: body.doctorId,
+            provinceId: body.provinceId,
+            paymentId: body.paymentId,
+            priceId: body.priceId,
+            nameClinic: body.nameClinic,
+            addressClinic: body.addressClinic,
+            note: body.note,
         })
         return {
             errCode: 0,
@@ -281,6 +293,36 @@ let updateDetailDr = async (data) => {
             doctor.contentText = data.contentText;
         }
         await doctor.save();
+
+        let doctorInfo = await db.Doctor_Info.findOne({
+            where: {
+                doctorId: data.id,
+            },
+            // attributes: {
+            //     exclude: ['UserId']
+            // },
+            raw: false,
+        });
+        if (!doctorInfo) {
+            await db.Doctor_Info.create({
+                doctorId: data.id,
+                provinceId: data.provinceId,
+                paymentId: data.paymentId,
+                priceId: data.priceId,
+                nameClinic: data.nameClinic,
+                addressClinic: data.addressClinic,
+                note: data.note,
+            })
+        } else {
+            doctorInfo.doctorId = data.id;
+            doctorInfo.provinceId = data.provinceId;
+            doctorInfo.paymentId = data.paymentId;
+            doctorInfo.priceId = data.priceId;
+            doctorInfo.nameClinic = data.nameClinic;
+            doctorInfo.addressClinic = data.addressClinic;
+            doctorInfo.note = data.note;
+            await doctorInfo.save();
+        }
         return {
             errCode: 0,
             message: 'Update detail doctor success',

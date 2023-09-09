@@ -1,4 +1,4 @@
-import { getAllTopDoctorService, createScheduleSV, getScheduleByDateIDSV } from '../services/doctorService';
+import { getAllTopDoctorService, createScheduleSV, getScheduleByDateIDSV, getDoctorInfoById } from '../services/doctorService';
 
 let getAllTopDoctor = async (req, res) => {
     let limit = req.query.limit;
@@ -17,9 +17,16 @@ let getScheduleByDateID = async (req, res) => {
     return res.status(200).json(response);
 }
 
+let getDoctorInfo = async (req, res) => {
+    let doctorId = req.query.doctorId;
+    let response = await getDoctorInfoById(doctorId);
+    return res.status(200).json(response);
+}
+
 module.exports = {
     getAllTopDoctor,
     createSchedule,
-    getScheduleByDateID
+    getScheduleByDateID,
+    getDoctorInfo
 
 }
