@@ -160,10 +160,11 @@ let getDoctorInfoById = async (id) => {
     }
 }
 
+
 module.exports = {
     getAllTopDoctorService,
     createScheduleSV,
     getScheduleByDateIDSV,
-    getDoctorInfoById
+    getDoctorInfoById,
 
 }
