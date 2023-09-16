@@ -1,5 +1,5 @@
 import db from "../models";
-import _, { has } from 'lodash';
+import _ from 'lodash';
 require('dotenv').config();
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 
@@ -46,13 +46,13 @@ let getAllTopDoctorService = async (limit) => {
 }
 
 let createScheduleSV = async (input) => {
-    console.log(input)
     try {
         let data = [];
         if (input && input.length > 0) {
             data = input.map(item => {
                 item.maxNumber = MAX_NUMBER_SCHEDULE;
-                item.date = new Date(item.date);
+                let [day, month, year] = item.date.split('/');
+                item.date = new Date(+year, +month - 1, +day);
                 return item;
             })
         }
@@ -67,7 +67,6 @@ let createScheduleSV = async (input) => {
         let temp = _.differenceWith(data, dataPrevious, (a, b) => {
             return a.timeType === b.timeType && a.date.toString() === b.date.toString();
         })
-        console.log('changes data', temp);
         await db.Schedule.bulkCreate(temp);
         return {
             errCode: 0,
@@ -83,7 +82,7 @@ let createScheduleSV = async (input) => {
 }
 
 let getScheduleByDateIDSV = async (doctorId, date) => {
-
+    console.log('date', date);
     if (!doctorId || !date) {
         return {
             errCode: 1,
@@ -159,6 +158,60 @@ let getDoctorInfoById = async (id) => {
         }
     }
 }
+let getDoctorInfoScheduleById = async (id, idModal) => {
+    try {
+        if (!id || !idModal)
+            return {
+                errCode: 1,
+                message: 'Missing parameter',
+            }
+        else {
+            let doctorInfo = await db.User.findOne({
+                where: {
+                    id: id,
+                },
+                include: [
+                    {
+                        model: db.Doctor_Info, as: 'doctorInfo', attributes: ['priceId'],
+                        include: [
+                            { model: db.Allcode, as: 'priceData', attributes: ['ValueEn', 'ValueVi'], }
+                        ]
+                    },
+                    { model: db.Markdown, as: 'doctorData', attributes: ['description'] },
+                    {
+                        model: db.Schedule, as: 'doctorSchedule', attributes: ['timeType', 'date'],
+                        where: {
+                            id: idModal
+                        },
+                        include: [
+                            { model: db.Allcode, as: 'timeTypeData', attributes: ['ValueEn', 'ValueVi'], }
+                        ]
+                    }
+                ],
+                attributes: ['id', 'firstName', 'lastName', 'email', 'image'],
+                raw: true,
+                nest: true,
+            })
+            if (doctorInfo)
+                return {
+                    errCode: 0,
+                    message: 'Get doctor_info success',
+                    data: doctorInfo,
+                }
+            else
+                return {
+                    errCode: 2,
+                    message: 'Not found'
+                }
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            errCode: -1,
+            message: 'Error from the server',
+        }
+    }
+}
 
 
 module.exports = {
@@ -166,5 +219,6 @@ module.exports = {
     createScheduleSV,
     getScheduleByDateIDSV,
     getDoctorInfoById,
+    getDoctorInfoScheduleById
 
 }

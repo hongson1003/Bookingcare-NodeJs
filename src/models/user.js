@@ -12,7 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.belongsTo(models.Allcode, { foreignKey: 'positionId', targetKey: 'keyMap', as: 'positionData' });
       User.belongsTo(models.Allcode, { foreignKey: 'gender', targetKey: 'keyMap', as: 'genderData' });
-      User.hasOne(models.Markdown, { foreignKey: 'doctorId', as: 'doctorData' })
+      User.hasOne(models.Markdown, { foreignKey: 'doctorId', as: 'doctorData' });
+      User.hasOne(models.Doctor_Info, { foreignKey: 'doctorId', as: 'doctorInfo' });
+      User.hasOne(models.Schedule, { foreignKey: 'doctorId', as: 'doctorSchedule' });
     }
   };
   User.init({
