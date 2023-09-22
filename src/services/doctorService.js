@@ -82,7 +82,6 @@ let createScheduleSV = async (input) => {
 }
 
 let getScheduleByDateIDSV = async (doctorId, date) => {
-    console.log('date', date);
     if (!doctorId || !date) {
         return {
             errCode: 1,
@@ -97,6 +96,7 @@ let getScheduleByDateIDSV = async (doctorId, date) => {
             },
             include: [
                 { model: db.Allcode, as: 'timeTypeData', attributes: ['valueEn', 'valueVi'] },
+                { model: db.User, as: 'doctorSchedule', attributes: ['email', 'firstName', 'lastName'] },
             ],
             // include: [
             //     { model: db.Allcode, as: 'timeTypeData', attributes: ['valueEn', 'valueVi'] },

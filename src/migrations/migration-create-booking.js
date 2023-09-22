@@ -2,12 +2,7 @@
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('booking', {
-            //     statusId: DataTypes.STRING,
-            // doctorId: DataTypes.INTEGER,
-            // patientId: DataTypes.INTEGER,
-            // date: DataTypes.DATE,
-            // timeType: DataTypes.STRING,
+        await queryInterface.createTable('bookings', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
@@ -24,7 +19,18 @@ module.exports = {
                 type: Sequelize.INTEGER
             },
             date: {
-                type: Sequelize.DATE
+                type: Sequelize.STRING
+            },
+            token: {
+                type: Sequelize.STRING
+            },
+            //     yearBirthday: DataTypes.INTEGER,
+            // reason: DataTypes.STRING,
+            yearBirthday: {
+                type: Sequelize.INTEGER
+            },
+            reason: {
+                type: Sequelize.STRING
             },
             timeType: {
                 type: Sequelize.STRING
