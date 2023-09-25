@@ -3,7 +3,7 @@
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('specialty', {
+        await queryInterface.createTable('specialties', {
             // description: DataTypes.STRING,
             // image: DataTypes.STRING,
 
@@ -16,11 +16,14 @@ module.exports = {
             name: {
                 type: Sequelize.STRING
             },
-            description: {
+            descriptionHTML: {
+                type: Sequelize.STRING
+            },
+            descriptionText: {
                 type: Sequelize.STRING
             },
             image: {
-                type: Sequelize.STRING
+                type: Sequelize.BLOB('long')
             },
             createdAt: {
                 allowNull: false,
