@@ -51,7 +51,8 @@ let initWebRoutes = (app) => {
 
     router.post('/api/create-new-specialty', adminController.createNewSpecialty);
     router.get('/api/get-all-specialties', adminController.getAllSpecialties);
-
+    router.put('/api/update-specialty', adminController.updateSpeciaty);
+    router.delete('/api/delete-specialty', adminController.deleteSpecialty)
     return app.use('/', router);
 }
 module.exports = initWebRoutes;

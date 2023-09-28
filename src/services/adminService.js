@@ -77,7 +77,84 @@ let getAllSpecialtiesService = async (id) => {
     }
 }
 
+let updateSpecialtyService = async (data) => {
+    if (!data.id)
+        return {
+            errCode: 1,
+            message: 'Mising parameter'
+        }
+    try {
+        let specialty = await db.Specialty.findOne({
+            where: {
+                id: data.id,
+            },
+            raw: false,
+
+        });
+        if (specialty) {
+            specialty.descriptionText = data.descriptionText;
+            specialty.descriptionHTML = data.descriptionHTML;
+            specialty.name = data.name;
+            specialty.image = data.image;
+            await specialty.save();
+            return {
+                errCode: 0,
+                message: 'Updated success'
+            }
+        } else {
+            return {
+                errCode: 2,
+                message: 'Not found to update',
+            }
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            errCode: -1,
+            message: 'Error from the server',
+        }
+    }
+
+}
+
+let deleteSpecialtyService = async (id) => {
+    if (!id)
+        return {
+            errCode: 1,
+            message: 'Mising parameter'
+        }
+    try {
+        let specialty = await db.Specialty.findOne({
+            where: {
+                id: id,
+            },
+            raw: false,
+
+        });
+        if (specialty) {
+            await specialty.destroy();
+            return {
+                errCode: 0,
+                message: 'Updated success'
+            }
+        } else {
+            return {
+                errCode: 2,
+                message: 'Not found to update',
+            }
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            errCode: -1,
+            message: 'Error from the server',
+        }
+    }
+}
+
 module.exports = {
     createNewSpecialtyService,
-    getAllSpecialtiesService
+    getAllSpecialtiesService,
+    updateSpecialtyService,
+    deleteSpecialtyService
 }
