@@ -2,6 +2,7 @@ import db from "../models";
 import emailService from '../services/emailService';
 import { v4 as uuidv4 } from 'uuid';
 require('dotenv').config();
+
 let buildToken = (doctorId, token) => {
     let local = process.env.URL_REACT;
     return `${local}/verify/token=${token}&doctorId=${doctorId}`;
@@ -104,7 +105,60 @@ let postVerifyAppoinmentService = async (data) => {
     }
 }
 
+let getAllDoctorWithSepecialtiesSV = async (id) => {
+    let doctors = await db.User.findAll({
+        attributes: ['id', 'image', 'firstName', 'lastName'],
+        where: {
+            roleId: 'R2'
+        },
+        include: [
+            {
+                model: db.Markdown, attributes: ['description'], as: 'doctorData'
+            },
+            { model: db.Allcode, attributes: ['valueEn', 'valueVi'], as: 'positionData' },
+            {
+                model: db.Doctor_Info, attributes: ['provinceId'], as: 'doctorInfo',
+                where: {
+                    specialtyId: id
+                }
+                ,
+                include: [
+                    { model: db.Allcode, attributes: ['valueEn', 'valueVi'], as: 'provinceData' },
+                ]
+            }
+
+        ],
+        raw: false,
+        nested: true
+    })
+    return {
+        errCode: 0,
+        data: doctors
+    }
+}
+
+let getMenuSearchServer = async () => {
+    try {
+        let specialties = await db.Specialty.findAll({
+            attributes: ['name', 'image', 'id']
+        })
+        return {
+            errCode: 0,
+            message: 'Get Specialties with image - name success',
+            data: specialties,
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            errCode: -1,
+            message: 'Errfrom t '
+        }
+    }
+}
+
 module.exports = {
     createBookingService,
-    postVerifyAppoinmentService
+    postVerifyAppoinmentService,
+    getAllDoctorWithSepecialtiesSV,
+    getMenuSearchServer
 }

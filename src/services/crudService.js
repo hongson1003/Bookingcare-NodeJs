@@ -6,7 +6,6 @@ let hashUserPassword = (password) => {
     return new Promise(async (resolve, reject) => {
         try {
             var hashPW = await bcrypt.hashSync(password, salt);
-            console.log('đã hash')
             resolve(hashPW);
         } catch (e) {
             reject(e);
@@ -67,7 +66,6 @@ let getUserById = async (userId) => {
 let updateUser = async (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log('data: ', data)
             let user = await db.User.findOne({
                 where: { id: data.id }
             })

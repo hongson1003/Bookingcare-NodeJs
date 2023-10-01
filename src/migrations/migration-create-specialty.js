@@ -17,10 +17,10 @@ module.exports = {
                 type: Sequelize.STRING
             },
             descriptionHTML: {
-                type: Sequelize.STRING
+                type: Sequelize.TEXT('long')
             },
             descriptionText: {
-                type: Sequelize.STRING
+                type: Sequelize.TEXT('long')
             },
             image: {
                 type: Sequelize.BLOB('long')

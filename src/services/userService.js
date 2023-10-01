@@ -80,7 +80,8 @@ let addUser = async (data) => {
         phoneNumber: data.phoneNumber,
         gender: data.gender,
         roleId: data.role,
-        positionId: data.position
+        positionId: data.position,
+
     })
     return {
         errCode: 0,
@@ -189,10 +190,8 @@ let getAllDR = async () => {
     }
 }
 let createDetailDr = async (body) => {
-    console.log(body);
-    console.log('body', body)
     if (!body.doctorId || !body.contentHTML || !body.contentText || !body.description
-        || !body.provinceId || !body.paymentId || !body.priceId || !body.nameClinic || !body.addressClinic || !body.note
+        || !body.provinceId || !body.paymentId || !body.priceId || !body.nameClinic || !body.addressClinic
     )
         return {
             errCode: 1,
@@ -215,6 +214,7 @@ let createDetailDr = async (body) => {
             nameClinic: body.nameClinic,
             addressClinic: body.addressClinic,
             note: body.note,
+            specialtyId: body.specialtyId
         })
         return {
             errCode: 0,
@@ -298,9 +298,6 @@ let updateDetailDr = async (data) => {
             where: {
                 doctorId: data.id,
             },
-            // attributes: {
-            //     exclude: ['UserId']
-            // },
             raw: false,
         });
         if (!doctorInfo) {
@@ -312,6 +309,7 @@ let updateDetailDr = async (data) => {
                 nameClinic: data.nameClinic,
                 addressClinic: data.addressClinic,
                 note: data.note,
+                specialtyId: data.specialtyId,
             })
         } else {
             doctorInfo.doctorId = data.id;
@@ -321,6 +319,7 @@ let updateDetailDr = async (data) => {
             doctorInfo.nameClinic = data.nameClinic;
             doctorInfo.addressClinic = data.addressClinic;
             doctorInfo.note = data.note;
+            doctorInfo.specialtyId = data.specialtyId;
             await doctorInfo.save();
         }
         return {
@@ -339,6 +338,8 @@ let updateDetailDr = async (data) => {
 
 
 
+
+
 module.exports = {
     checkLogin,
     getUsers,
@@ -349,5 +350,5 @@ module.exports = {
     getAllDR,
     createDetailDr,
     getDRById,
-    updateDetailDr
+    updateDetailDr,
 }

@@ -131,9 +131,11 @@ let getDoctorInfoById = async (id) => {
                     doctorId: id,
                 },
                 include: [
-                    { model: db.Allcode, as: 'priceData', attributes: ['valueEn', 'valueVi'] },
-                    { model: db.Allcode, as: 'provinceData', attributes: ['valueEn', 'valueVi'] },
-                    { model: db.Allcode, as: 'paymentData', attributes: ['valueEn', 'valueVi'] },
+                    { model: db.Allcode, as: 'priceData', attributes: ['valueEn', 'valueVi', 'keyMap'] },
+                    { model: db.Allcode, as: 'provinceData', attributes: ['valueEn', 'valueVi', 'keyMap'] },
+                    { model: db.Allcode, as: 'paymentData', attributes: ['valueEn', 'valueVi', 'keyMap'] },
+                    { model: db.Specialty, as: 'specialtyData', attributes: ['name', 'id'] },
+
                 ],
                 raw: true,
                 nest: true,

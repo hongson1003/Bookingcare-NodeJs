@@ -153,6 +153,12 @@ let updateDetail = async (req, res) => {
     let response = await userService.updateDetailDr(req.body.data);
     return res.status(200).json(response);
 }
+
+let getAllDoctorWithSepecialties = async (req, res) => {
+    let response = await userService.getAllDoctorWithSepecialtiesSV();
+    return res.status(200).json(response);
+}
+
 module.exports = {
     handleLogin,
     hanleGetUsers,
@@ -163,5 +169,6 @@ module.exports = {
     getAllDoctor,
     createDetailDoctor,
     getDoctorById,
-    updateDetail
+    updateDetail,
+    getAllDoctorWithSepecialties
 }

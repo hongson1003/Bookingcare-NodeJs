@@ -1,5 +1,4 @@
 import express from 'express';
-import homeController from '../controllers/homeController';
 import userController from '../controllers/userController'
 import doctorController from '../controllers/doctorController';
 import patientController from '../controllers/patientController';
@@ -7,14 +6,14 @@ import adminController from '../controllers/adminController';
 let router = express.Router();
 
 let initWebRoutes = (app) => {
-    router.get('/', homeController.getHomePage);
-    router.get('/about', homeController.getAboutPage);
-    router.get('/crud', homeController.getCrud);
-    router.post('/post-crud', homeController.postCrud);
-    router.get('/read-crud', homeController.handleUsers);
-    router.get('/crud-edit', homeController.editUser);
-    router.post('/put-updateUser', homeController.putCrud);
-    router.get('/crud-delete', homeController.deleteUser);
+    // router.get('/', homeController.getHomePage);
+    // router.get('/about', homeController.getAboutPage);
+    // router.get('/crud', homeController.getCrud);
+    // router.post('/post-crud', homeController.postCrud);
+    // router.get('/read-crud', homeController.handleUsers);
+    // router.get('/crud-edit', homeController.editUser);
+    // router.post('/put-updateUser', homeController.putCrud);
+    // router.get('/crud-delete', homeController.deleteUser);
     router.post('/api/login', userController.handleLogin);
 
     // write api for get all users
@@ -53,6 +52,11 @@ let initWebRoutes = (app) => {
     router.get('/api/get-all-specialties', adminController.getAllSpecialties);
     router.put('/api/update-specialty', adminController.updateSpeciaty);
     router.delete('/api/delete-specialty', adminController.deleteSpecialty)
+    
+    router.get('/api/get-all-doctor-with-specialties', patientController.getAllDoctorWithSepecialties);
+    router.get('/api/get-all-menu-specialties', patientController.getMenuSearch);
+
+
     return app.use('/', router);
 }
 module.exports = initWebRoutes;
