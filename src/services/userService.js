@@ -23,7 +23,7 @@ let checkLogin = async (email, password1) => {
         if (correct) {
             user.name = user.firstName + ' ' + user.lastName;
             for (let prop in user)
-                if (prop != 'email' && prop != 'roleId' && prop != 'name') {
+                if (prop != 'email' && prop != 'roleId' && prop != 'name' && prop != 'id') {
                     delete user[prop];
                 }
             return {

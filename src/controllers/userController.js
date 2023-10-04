@@ -159,6 +159,8 @@ let getAllDoctorWithSepecialties = async (req, res) => {
     return res.status(200).json(response);
 }
 
+
+
 module.exports = {
     handleLogin,
     hanleGetUsers,

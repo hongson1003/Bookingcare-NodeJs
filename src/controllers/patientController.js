@@ -28,9 +28,11 @@ let getMenuSearch = async (req, res) => {
 
 
 
+
+
 module.exports = {
     createBooking,
     postVerifyAppoinment,
     getAllDoctorWithSepecialties,
-    getMenuSearch
+    getMenuSearch,
 }

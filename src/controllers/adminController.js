@@ -17,9 +17,31 @@ let deleteSpecialty = async (req, res) => {
     return res.status(200).json(response);
 }
 
+let createNewClinic = async (req, res) => {
+    let response = await adminService.createNewClinicService(req.body);
+    return res.status(200).json(response);
+}
+let getAllClinics = async (req, res) => {
+    let response = await adminService.getAllClinicsService(req.query.id);
+    return res.status(200).json(response);
+}
+let updateClinic = async (req, res) => {
+    let response = await adminService.updateClinicService(req.body);
+    return res.status(200).json(response);
+}
+let deleteClinic = async (req, res) => {
+    let response = await adminService.deleteClinicService(req.body.id);
+    return res.status(200).json(response);
+}
+
+
 module.exports = {
     createNewSpecialty,
     getAllSpecialties,
     updateSpeciaty,
     deleteSpecialty,
+    getAllClinics,
+    createNewClinic,
+    updateClinic,
+    deleteClinic,
 }

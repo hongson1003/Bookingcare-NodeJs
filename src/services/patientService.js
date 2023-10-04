@@ -160,5 +160,5 @@ module.exports = {
     createBookingService,
     postVerifyAppoinmentService,
     getAllDoctorWithSepecialtiesSV,
-    getMenuSearchServer
+    getMenuSearchServer,
 }

@@ -215,12 +215,69 @@ let getDoctorInfoScheduleById = async (id, idModal) => {
     }
 }
 
+let getAllPatientBookingFromSV = async (id) => {
+    try {
+        if (!id)
+            return {
+                errCode: 1,
+                message: 'Missing parameter',
+            }
+        else {
+            let bookings = await db.Booking.findAll({
+                where: {
+                    doctorId: id,
+                },
+                include: [
+                    { model: db.Allcode, as: 'timeBooking', attributes: ['valueEn', 'valueVi'] },
+                    {
+                        model: db.User, as: 'bookingData', attributes: ['firstName', 'lastName', 'email', 'phoneNumber']
+                        , include: [
+                            { model: db.Allcode, as: 'genderData', attributes: ['valueEn', 'valueVi'] },
+                        ]
+                    },
+                ],
+                raw: true,
+                nest: true,
+            })
+            if (bookings) {
+                let arrPatientIds = [];
+                bookings.forEach(item => {
+                    arrPatientIds.push({
+                        id: item.id,
+                        patientId: item.patientId,
+                        yearBirthday: item.yearBirthday,
+                        timeType: item.timeBooking,
+                        bookingData: item.bookingData,
+                    });
+                })
+                return {
+                    errCode: 0,
+                    message: 'Get patients success',
+                    data: arrPatientIds,
+                }
+            }
+            else
+                return {
+                    errCode: 2,
+                    message: 'Not found'
+                }
+        }
+    } catch (e) {
+        console.log(e);
+        return {
+            errCode: -1,
+            message: 'Error from the server',
+        }
+    }
+}
+
 
 module.exports = {
     getAllTopDoctorService,
     createScheduleSV,
     getScheduleByDateIDSV,
     getDoctorInfoById,
-    getDoctorInfoScheduleById
+    getDoctorInfoScheduleById,
+    getAllPatientBookingFromSV
 
 }
