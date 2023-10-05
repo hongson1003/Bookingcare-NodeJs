@@ -26,6 +26,11 @@ let getMenuSearch = async (req, res) => {
     return res.status(200).json(response);
 }
 
+let getAllDoctor = async (req, res) => {
+    let response = await patientService.getAllDoctorSV();
+    return res.status(200).json(response);
+}
+
 
 
 
@@ -35,4 +40,5 @@ module.exports = {
     postVerifyAppoinment,
     getAllDoctorWithSepecialties,
     getMenuSearch,
+    getAllDoctor
 }

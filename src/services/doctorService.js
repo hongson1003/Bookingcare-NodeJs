@@ -226,6 +226,7 @@ let getAllPatientBookingFromSV = async (id) => {
             let bookings = await db.Booking.findAll({
                 where: {
                     doctorId: id,
+                    statusId: 'S2',
                 },
                 include: [
                     { model: db.Allcode, as: 'timeBooking', attributes: ['valueEn', 'valueVi'] },

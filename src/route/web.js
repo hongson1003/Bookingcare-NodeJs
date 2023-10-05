@@ -54,6 +54,8 @@ let initWebRoutes = (app) => {
     router.delete('/api/delete-clinic', adminController.deleteClinic)
 
     router.get('/api/get-all-patient-booking', doctorController.getAllPatientsBooking)
+
+    router.get('/api/get-all-doctor-with-name-image', patientController.getAllDoctor)
     return app.use('/', router);
 }
 module.exports = initWebRoutes;

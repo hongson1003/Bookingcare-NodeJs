@@ -156,9 +156,54 @@ let getMenuSearchServer = async () => {
     }
 }
 
+let getAllDoctorSV = async () => {
+    try {
+        let data = await db.User.findAll({
+            attributes: [
+                'firstName', 'lastName', 'image', 'id', 'positionId',
+            ],
+            where: {
+                roleId: 'R2',
+            },
+            include: [
+                { model: db.Allcode, as: 'positionData', attributes: ['valueVi', 'valueEn'] },
+                {
+                    model: db.Doctor_Info, as: 'doctorInfo', attributes: ['specialtyId'],
+                    include: [
+                        { model: db.Specialty, as: 'specialtyData', attributes: ['name'] },
+
+                    ]
+
+                },
+
+            ],
+            raw: false,
+            nested: true,
+        });
+        if (data)
+            return {
+                errCode: 0,
+                message: "Get all doctors success",
+                data: data,
+            }
+        else
+            return {
+                errCode: 1,
+                message: "Not found doctors"
+            }
+    } catch (e) {
+        console.log(e);
+        return {
+            errCode: 1,
+            message: "Not found doctors"
+        }
+    }
+}
+
 module.exports = {
     createBookingService,
     postVerifyAppoinmentService,
     getAllDoctorWithSepecialtiesSV,
     getMenuSearchServer,
+    getAllDoctorSV
 }
