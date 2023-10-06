@@ -2,7 +2,7 @@ import db from "../models";
 import _ from 'lodash';
 require('dotenv').config();
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
-
+import emailService from './emailService';
 
 let getAllTopDoctorService = async (limit) => {
     if (!limit)
@@ -215,18 +215,23 @@ let getDoctorInfoScheduleById = async (id, idModal) => {
     }
 }
 
-let getAllPatientBookingFromSV = async (id) => {
+let getAllPatientBookingFromSV = async (id, date) => {
     try {
-        if (!id)
+        if (!id || !date)
             return {
                 errCode: 1,
                 message: 'Missing parameter',
             }
         else {
+            let now = new Date(date);
+            now.setHours(0);
+            now.setMinutes(0);
+            now.setSeconds(0);
             let bookings = await db.Booking.findAll({
                 where: {
                     doctorId: id,
                     statusId: 'S2',
+                    date: now,
                 },
                 include: [
                     { model: db.Allcode, as: 'timeBooking', attributes: ['valueEn', 'valueVi'] },
@@ -249,6 +254,8 @@ let getAllPatientBookingFromSV = async (id) => {
                         yearBirthday: item.yearBirthday,
                         timeType: item.timeBooking,
                         bookingData: item.bookingData,
+                        date: item.date,
+                        timeType: item.timeType,
                     });
                 })
                 return {
@@ -272,6 +279,35 @@ let getAllPatientBookingFromSV = async (id) => {
     }
 }
 
+let sendEmailToPatient = async (data) => {
+    console.log(data);
+    if (!data.emailPatient) {
+        return {
+            errCode: 1,
+            message: 'Missing parameter'
+        }
+    } else {
+        let booking = await db.Booking.findOne({
+            where: {
+                patientId: data.patientId,
+                statusId: 'S2',
+                timeType: data.timeType,
+                date: data.date
+            },
+            raw: false,
+        })
+        if (booking) {
+            booking.statusId = 'S3';
+            await booking.save();
+            await emailService.sendEmailToPatient(data);
+            return {
+                errCode: 0,
+                message: "Update status success",
+            }
+        }
+    }
+}
+
 
 module.exports = {
     getAllTopDoctorService,
@@ -279,6 +315,7 @@ module.exports = {
     getScheduleByDateIDSV,
     getDoctorInfoById,
     getDoctorInfoScheduleById,
-    getAllPatientBookingFromSV
+    getAllPatientBookingFromSV,
+    sendEmailToPatient
 
 }

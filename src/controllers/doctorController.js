@@ -1,6 +1,6 @@
 import {
     getAllTopDoctorService, createScheduleSV, getScheduleByDateIDSV, getDoctorInfoById,
-    getDoctorInfoScheduleById, getAllPatientBookingFromSV
+    getDoctorInfoScheduleById, getAllPatientBookingFromSV, sendEmailToPatient
 } from '../services/doctorService';
 
 let getAllTopDoctor = async (req, res) => {
@@ -36,7 +36,12 @@ let getDoctorInfoSchedule = async (req, res) => {
 }
 
 let getAllPatientsBooking = async (req, res) => {
-    let response = await getAllPatientBookingFromSV(req.query.id);
+    let response = await getAllPatientBookingFromSV(req.query.id, req.query.date);
+    return res.status(200).json(response);
+}
+
+let postEmailToPatient = async (req, res) => {
+    let response = await sendEmailToPatient(req.body);
     return res.status(200).json(response);
 }
 
@@ -49,6 +54,7 @@ module.exports = {
     getScheduleByDateID,
     getDoctorInfo,
     getDoctorInfoSchedule,
-    getAllPatientsBooking
+    getAllPatientsBooking,
+    postEmailToPatient
 
 }

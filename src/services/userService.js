@@ -248,6 +248,15 @@ let getDRById = async (id) => {
                 },
                 {
                     model: db.Allcode, as: 'positionData', attributes: ['valueVi', 'valueEn'],
+                },
+                {
+                    model: db.Doctor_Info, as: 'doctorInfo', attributes: ['id'],
+                    include: [
+                        {
+                            model: db.Specialty, as: 'specialtyData', attributes: ['name'],
+                        },
+                    ]
+
                 }
             ],
             raw: false,

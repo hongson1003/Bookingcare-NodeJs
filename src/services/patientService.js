@@ -28,13 +28,14 @@ let createBookingService = async (data) => {
             }
         });
         let token = uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+
         const [booking, create2] = await db.Booking.findOrCreate({
             where: { patientId: user.id, timeType: data.timeType },
             defaults: {
                 statusId: 'S1',
                 doctorId: data.doctorId,
                 patientId: user.id,
-                date: new Date().toString(),
+                date: data.date,
                 yearBirthday: data.yearBirthday,
                 reason: data.reason,
                 timeType: data.timeType,
