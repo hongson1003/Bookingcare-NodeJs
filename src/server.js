@@ -25,7 +25,6 @@ import connectDB from './config/connectDB';
 connectDB();
 
 
-
 let port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log('Node is running on port: ', port);
